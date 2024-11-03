@@ -55,14 +55,21 @@ if wifi_signal is not None:
 else:
     print("Signal strength not found.")
     
-def test_signal_speed():
+def test_wifi_speed():
     st = speedtest.Speedtest()
     st.get_best_server()
     download_speed = st.download() / 1_000_000 #convert to Mbps
     upload_speed = st.upload() / 1_000_000 #convert to Mbps
-    ping = st.results.ping
+    ping_value = st.results.ping
     print(f"Download speed: {download_speed:.2f} Mbps")
     print(f"Upload speed: {upload_speed:.2f} Mbps")
-    ping(f"Ping: {ping} ms")
-test_signal_speed()
+    print(f"Ping: {ping_value} ms")
+test_wifi_speed()
     
+def wifi_ping_test(host='google.com'):
+    response_time = ping(host)
+    if response_time:
+        print(f"Ping to {host}: {response_time * 1000:.2f} ms")
+    else:
+        print(f"Failed to ping {host}")
+wifi_ping_test()

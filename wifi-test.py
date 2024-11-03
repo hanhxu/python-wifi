@@ -58,4 +58,11 @@ else:
 def test_signal_speed():
     st = speedtest.Speedtest()
     st.get_best_server()
+    download_speed = st.download() / 1_000_000 #convert to Mbps
+    uoload_speed = st.upload() / 1_000_000 #convert to Mbps
+    ping = st.results.ping
+    print(f"Download speed: {download_speed:.2f} Mbps")
+    print(f"Upload speed: {upload_speed:.2f} Mbps")
+    ping(f"Ping: {ping} ms")
+test_signal_speed()
     

@@ -54,3 +54,8 @@ if wifi_signal is not None:
     print(f'WiFi Signal Strength: {wifi_signal}')
 else:
     print("Signal strength not found.")
+    
+def test_signal_speed():
+    st = speedtest.Speedtest()
+    st.get_best_server()
+    

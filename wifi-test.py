@@ -69,7 +69,7 @@ test_wifi_speed()
 def wifi_ping_test(host='google.com'):
     response_time = ping(host)
     if response_time:
-        print(f"Ping to {host}: {response_time * 1000:.2f} ms")
+        print(f"Ping to {host}: {response_time}\t{response_time * 1000:.2f} ms")
     else:
         print(f"Failed to ping {host}")
 wifi_ping_test()

@@ -141,3 +141,16 @@ for val in secMap.values():
     print(minHeap[0])
     while len(minHeap):
         print(heapq.heappop(minHeap))
+        
+def double(arr, val):
+    def helper():
+        #modifying array works
+        #enumerate returns an iterable of tuples, where each 
+        # tuple contains: The index of the element. The 
+        # value of the element at that index.
+        for i, n in enumerate(arr):
+            arr[i] *= 2
+        nonlocal val
+        val *= 2
+    helper()
+    print(arr, val)

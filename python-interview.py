@@ -142,29 +142,95 @@
 #     while len(minHeap):
 #         print(heapq.heappop(minHeap))
         
-def double(arr, val):
-    def helper():
-        #modifying array works
-        #enumerate returns an iterable of tuples, where each 
-        # tuple contains: The index of the element. The 
-        # value of the element at that index.
-        for i, n in enumerate(arr):
-            arr[i] *= 2
-        nonlocal val
-        val *= 2
-    helper()
-    print(arr, val)
-nums = [1,2]
-val = 3
-double(nums, val)
+# def double(arr, val):
+#     def helper():
+#         #modifying array works
+#         #enumerate returns an iterable of tuples, where each 
+#         # tuple contains: The index of the element. The 
+#         # value of the element at that index.
+#         for i, n in enumerate(arr):
+#             arr[i] *= 2
+#         nonlocal val
+#         val *= 2
+#     helper()
+#     print(arr, val)
+# nums = [1,2]
+# val = 3
+# double(nums, val)
 
-class MyClass:
-    # Constructor
-    def __init__(self, nums):
-        #create member variables
-        self.nums = nums
-        self.size = len(nums)
-    def getLength(self):
-        return self.size
-    def grtDoubleLength(self):
-        return 2 * self.getLength()
+# class MyClass:
+#     # Constructor
+#     def __init__(self, nums):
+#         #create member variables
+#         self.nums = nums
+#         self.size = len(nums)
+#     def getLength(self):
+#         return self.size
+#     def grtDoubleLength(self):
+#         return 2 * self.getLength()
+
+import speedtest
+import subprocess
+import pandas as pd
+import re
+from ping3 import ping, verbose_ping
+    
+    
+def test_wifi_speed():
+    st = speedtest.Speedtest()
+    st.get_best_server()
+    download_speed = st.download() / 1_000_000
+    upload_speed = st.upload() / 1_000_000
+    ping_value = st.results.ping
+    print(f"Download speed: {download_speed:.2f} Mbps")
+    print(f"Upload speed: {upload_speed:.2f} Mbps")
+    print(f"Ping: {ping_value} ms")
+
+
+def wifi_ping_test(host='google.com'):
+    response_time = ping(host)
+    if response_time:
+        print(f"Ping to {host}: {response_time}\t{response_time * 1000:.2f} ms")
+    else:
+        print(f"Failed to ping {host}")
+ 
+    
+    
+def get_wifi_signal_strength():
+    
+    wifi_info = {}
+    result = subprocess.run(['netsh', 'wlan', 'show', 'int'], stdout = subprocess.PIPE)
+    output = result.stdout.decode('utf-8')
+    if result.returncode != 0:
+        print("Error executing command.")
+    else:
+        print(output) 
+    for line in output.split('\n'):
+        if 'description' in line.lower():
+            wifi_info['Description'] = line.split(':')[1].strip()
+        elif re.search(r"^\s*SSID\s*:\s*(.*)", line.upper()):
+            wifi_info['SSID'] = line.split(': ')[1].strip()
+        elif 'receive rate' in line.lower():
+            wifi_info['Receive rate (Mbps)'] = line.split(':')[1].strip()
+        elif 'transmit rate' in line.lower():
+            wifi_info['Transmit rate (Mbps)'] = line.split(':')[1].strip()
+        elif 'signal' in line.lower():
+            wifi_info['Signal'] = line.split(':')[1].strip()         
+    return wifi_info
+
+
+def save_to_excel(wifi_data, filename="wifi_info.xlsx"):
+    # Convert wifi_data to DataFrame for easier manipulation
+    # Create DataFrame from a list containing an empty dictionary
+    dFrame = pd.DataFrame([wifi_data])
+    dFrame.to_excel(filename, index=False)
+    print(f"Data saved to {filename}")
+    
+    
+test_wifi_speed()
+wifi_ping_test()  
+wifi_profile = get_wifi_signal_strength()
+if wifi_profile:
+    save_to_excel(wifi_profile)
+else:
+    print("Wi-Fi information not found or an error occurred.")

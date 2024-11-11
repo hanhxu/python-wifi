@@ -35,7 +35,7 @@ from ping3 import ping, verbose_ping
 def get_wifi_signal_strength():
     #stdout=subprocess.PIPE, this tells Python to capture the output of the command
     result = subprocess.run(['netsh', 'wlan', 'show', 'interfaces'], stdout=subprocess.PIPE)
-    #this method converts the byte output into a string format using UTF-8 encodingd
+    #this method converts the byte output into a string format using UTF-8 encoding
     output = result.stdout.decode('utf-8')
     
     if result.returncode != 0:
